@@ -290,15 +290,19 @@ public class MyModel extends Observable implements Model {
 	@Override
 	public Solution<Position> solutionGenerator(String[] parameters) {	
 		try {
+			//Open socket to the server.
 			Socket myServer = new Socket(properties.getIP(), properties.getPort());
+			//Send the maze to the server.
 			ObjectOutputStream output = new ObjectOutputStream(myServer.getOutputStream());
 			output.writeObject(mazes.get(parameters[0]));
 			output.flush();
-			
+			//Reading the solution.
 			ObjectInputStream input = new ObjectInputStream(myServer.getInputStream());
 			@SuppressWarnings("unchecked")
 			Solution<Position> ans = (Solution<Position>)input.readObject();
+			//Closing sessions and streams.
 			input.close();
+			output.close();
 			myServer.close();
 			return ans;
 			} catch (Exception e) {
