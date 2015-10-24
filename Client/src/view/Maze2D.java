@@ -124,6 +124,5 @@ public class Maze2D extends MazeBoard{
 	@Override
 	public void moveDownLvl() {
 		player.getLocation().setY(player.getLocation().getY() - 1);
-
 	}
 }
