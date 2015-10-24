@@ -8,7 +8,6 @@ import java.io.Serializable;
 public class Properties implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	private String cacheFileLocation;
 	private int numberOfThreads;
 	private String ip;
 	private int port;
@@ -20,12 +19,7 @@ public class Properties implements Serializable {
 	public void setNumberOfThreads(int numberOfThreads) {
 		this.numberOfThreads = numberOfThreads;
 	}
-	public String getCacheFileLocation() {
-		return cacheFileLocation;
-	}
-	public void setCacheFileLocation(String cacheFileLocation) {
-		this.cacheFileLocation = cacheFileLocation;
-	}
+
 	public String getViewType() {
 		return viewType;
 	}

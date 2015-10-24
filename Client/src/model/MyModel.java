@@ -9,6 +9,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.ConnectException;
 import java.net.Socket;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
@@ -306,7 +307,13 @@ public class MyModel extends Observable implements Model {
 			myServer.close();
 			return ans;
 			} catch (Exception e) {
-				e.printStackTrace();
+				if(e instanceof ConnectException) { 
+					this.setChanged();
+					this.notifyObservers("Please check server connectivity");
+					return null;
+				}
+				else
+					e.printStackTrace();
 			}
 		return null;
 	}

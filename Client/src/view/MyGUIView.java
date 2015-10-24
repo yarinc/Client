@@ -292,6 +292,7 @@ public class MyGUIView extends BasicWindow implements View {
 				MazeInfo maze = new MazeInfo(shell);
 				String parameters = maze.open();
 				if(parameters != null) {
+					solution = null;
 					String command = "display " + parameters;
 					currentMaze = parameters;
 					inputToPresenter(command);
@@ -328,16 +329,18 @@ public class MyGUIView extends BasicWindow implements View {
 				String command = "from " + currentMaze + " " + board.player.getLocation().getX() + " " + board.player.getLocation().getY() + " " + board.player.getLocation().getZ();
 				inputToPresenter(command);
 				//Remove the first position from the solution(current position).
-				solution.getSolution().remove(0);
-				//Set the player to the first position in the solution.
-				board.setCharacterPosition(solution.getSolution().get(0));
-				//If player reached the end position, disable hint and solve buttons.
-				if(board.player.getLocation().equals(board.end.getLocation())) {
-					hintButton.setEnabled(false);
-					solveButton.setEnabled(false);
-				}
-				//Redraw board.
-				board.redraw();
+				if (solution != null) { 
+					solution.getSolution().remove(0);
+					//Set the player to the first position in the solution.
+					board.setCharacterPosition(solution.getSolution().get(0));
+					//If player reached the end position, disable hint and solve buttons.
+					if(board.player.getLocation().equals(board.end.getLocation())) {
+						hintButton.setEnabled(false);
+						solveButton.setEnabled(false);
+					}
+					//Redraw board.
+					board.redraw();
+					}
 			}
 			
 			@Override
@@ -362,34 +365,42 @@ public class MyGUIView extends BasicWindow implements View {
 				String command = "from " + currentMaze + " " + board.player.getLocation().getX() + " " + board.player.getLocation().getY() + " " + board.player.getLocation().getZ();
 				inputToPresenter(command);
 				//Remove first Position from the solution.
-				solution.getSolution().remove(0);
-				//New timer task to move the player in the solution direction.
-				timer=new Timer();
-						task=new TimerTask() {
-							@Override
-							public void run() {
-								display.syncExec(new Runnable() {
-									@Override
-									public void run() {
-										//If player reached to the end point
-										if(board.player.getLocation().equals(board.end.getLocation())) {
-											//Cancel the timer task and enable generate and display buttons.
-											task.cancel();
-											timer.cancel();
-											generateButton.setEnabled(true);
-											displayButton.setEnabled(true);
+				if(solution != null) {
+					solution.getSolution().remove(0);
+					//New timer task to move the player in the solution direction.
+					timer=new Timer();
+							task=new TimerTask() {
+								@Override
+								public void run() {
+									display.syncExec(new Runnable() {
+										@Override
+										public void run() {
+											//If player reached to the end point
+											if(board.player.getLocation().equals(board.end.getLocation())) {
+												//Cancel the timer task and enable generate and display buttons.
+												task.cancel();
+												timer.cancel();
+												generateButton.setEnabled(true);
+												displayButton.setEnabled(true);
+											}
+											else {
+												//Move the player by one position, redraw the board and remove the position from the solution.
+												board.setCharacterPosition(solution.getSolution().get(0));
+												board.redraw();
+												solution.getSolution().remove(0);
+											}
 										}
-										else {
-											//Move the player by one position, redraw the board and remove the position from the solution.
-											board.setCharacterPosition(solution.getSolution().get(0));
-											board.redraw();
-											solution.getSolution().remove(0);
-										}
-									}
-								});
-							}
-						};				
-						timer.scheduleAtFixedRate(task, 0, 500);
+									});
+								}
+							};				
+							timer.scheduleAtFixedRate(task, 0, 500);
+					}
+				else {
+					generateButton.setEnabled(true);
+					displayButton.setEnabled(true);
+					solveButton.setEnabled(true);
+					hintButton.setEnabled(true);
+				}
 			}
 			@Override
 			public void widgetDefaultSelected(SelectionEvent arg0) {}

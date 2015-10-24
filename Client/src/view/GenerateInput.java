@@ -83,17 +83,6 @@ public class GenerateInput extends Dialog {
         buttonOK.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_END));
         Button buttonCancel = new Button(shell, SWT.PUSH);
         buttonCancel.setText("Cancel");
-        //Listener for the text box.
-        text.addListener(SWT.Modify, new Listener() {
-            public void handleEvent(Event event) {
-              try {
-                name = new String(text.getText());
-                buttonOK.setEnabled(true);
-              } catch (Exception e) {
-                buttonOK.setEnabled(false);
-              }
-            }
-          });
         
         //Listener for the OK button
         buttonOK.addSelectionListener(new SelectionListener() {
@@ -114,7 +103,6 @@ public class GenerateInput extends Dialog {
 					enterName.setText("Error!");
 					enterName.setMessage("Invalid name.");
 					enterName.open();
-					
 				}
 			}
 			@Override

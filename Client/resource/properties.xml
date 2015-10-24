@@ -4,9 +4,6 @@
   <void property="IP">
    <string>127.0.0.1</string>
   </void>
-  <void property="cacheFileLocation">
-   <string>c:\temp\cachedMazes.gz</string>
-  </void>
   <void property="numberOfThreads">
    <int>3</int>
   </void>
